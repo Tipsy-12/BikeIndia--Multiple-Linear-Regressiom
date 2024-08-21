@@ -32,7 +32,7 @@ features that may influence demand, such as:
 - Missing Values: The notebook addresses missing data and explains how they were
 handled.
 - Outlier Treatment: Any detected outliers in the dataset were handled appropriately.
-- 
+  
 ### Exploratory Data Analysis (EDA)
 
 Visual Analysis:
