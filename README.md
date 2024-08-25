@@ -2,10 +2,7 @@
 
 ### Introduction
    
-- Problem Statement: BikeIndia, a US-based bike-sharing service provider, experienced a
-significant drop in revenue due to the COVID-19 pandemic. The company aims to forecast the
-demand for bike-sharing services post-pandemic to optimize their operations and boost
-profitability.
+- Problem Statement: BikeIndia, a US-based bike-sharing service provider, experienced a significant drop in revenue due to the COVID-19 pandemic. The company aims to forecast the demand for bike-sharing services post-pandemic to optimize its operations and boost profitability.
 
 - Objective: The project seeks to identify the significant factors affecting bike demand and
 develop a Multiple Linear Regression model to predict daily bike rentals based on these factors.
@@ -30,8 +27,8 @@ features that may influence demand, such as:
 - Count: The target variable representing the number of bikes rented.
 
 ### Data Preprocessing:
-- Missing Values: The notebook addresses missing data and explains how they were
-handled.
+- Missing Values: There was no missing data in either rows or columns.
+- Duplicate Rows: There were no duplicate rows.
 - Outlier Treatment: Any detected outliers in the dataset were handled appropriately.
   
 ### Exploratory Data Analysis (EDA)
@@ -57,7 +54,7 @@ Transformation:
 - Datetime Features: The date and time are split into more granular features (e.g., hour, day,
 month) to better capture temporal patterns.
 - Encoding Categorical Variables: Convert categorical features like season and weather into
-dummy variables for modeling.
+dummy variables for modelling.
 - Normalization: The features are normalized or standardized to ensure that all variables
 contribute equally to the model.
 
