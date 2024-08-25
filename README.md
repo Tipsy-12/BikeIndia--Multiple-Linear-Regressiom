@@ -28,7 +28,8 @@ features that may influence demand, such as:
 - Humidity: The relative humidity.
 - Windspeed: The wind speed in km/h.
 - Count: The target variable representing the number of bikes rented.
-- Data Preprocessing:
+
+### Data Preprocessing:
 - Missing Values: The notebook addresses missing data and explains how they were
 handled.
 - Outlier Treatment: Any detected outliers in the dataset were handled appropriately.
