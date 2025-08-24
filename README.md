@@ -43,14 +43,15 @@ The CLT says: if you take the sample mean of n independent draws from some distr
 
 
 \[
-\sum_{i=1}^{n} X_i = n \bar{X},
+\sum_{i=1}^{n} X_i = n \bar{X}.
 \]
 
-and after rescaling:
+After centring and scaling, the normalised sum converges in distribution to a standard Normal:  
 
 \[
-\frac{\sum_{i=1}^{n} X_i - n\mu}{\sqrt{n}\sigma} \;\;\xrightarrow{d}\;\; N(0,1).
+\frac{\sum_{i=1}^{n} X_i - n\mu}{\sqrt{n}\sigma} \;\xrightarrow{d}\; N(0,1).
 \]
+
 
 
 
