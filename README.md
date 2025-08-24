@@ -42,19 +42,6 @@ The daily total count is not just one “event,” but the sum of thousands of i
 The CLT says: if you take the sample mean of n independent draws from some distribution with finite mean/variance, then as n→∞, the distribution of that sample mean tends to normal. In our case, each day’s bike demand is like one draw from the (unknown) population distribution of daily demand. Since we actually have 731 days of observations, the sample size is large enough for CLT to apply.
 
 
-\[
-\sum_{i=1}^{n} X_i = n \bar{X}.
-\]
-
-After centring and scaling, the normalised sum converges in distribution to a standard Normal:  
-
-\[
-\frac{\sum_{i=1}^{n} X_i - n\mu}{\sqrt{n}\sigma} \;\xrightarrow{d}\; N(0,1).
-\]
-
-
-
-
 **One modelling view (Binomial):**  
 Each ride decision can be thought of as a Bernoulli trial (ride or no ride). If we imagine summing over all potential riders, then the daily total is like a Binomial random variable. For large numbers (e.g. ~4500 average rides per day, max ~8714), the Binomial is very well-approximated by a Normal distribution.
 
