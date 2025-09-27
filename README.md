@@ -28,35 +28,40 @@ features that may influence demand, such as:
 
 ## Model Choice:
 
-**Counts often violate linear regression assumptions:**
+**Why counts often need special treatment**
+Count data are usually small integers (0, 1, 2, …). This makes them problematic for linear regression:
 
-Normally, count data are small integers (0, 1, 2, …). This causes two issues:
-- Non-normal errors → residuals are skewed, violating the normality assumption.
-- Heteroskedasticity → variance increases with the mean, so constant variance of errors doesn’t hold.
-That’s why counts are usually modelled with Poisson-type regressions.
+* **Non-normal errors**: residuals are skewed, violating normality.
+* **Heteroskedasticity**: variance typically grows with the mean, violating constant variance.
+  That’s why count regressions (Poisson, Negative Binomial) are commonly used.
 
-**Why Poisson regression may fail here:**
-The Poisson model assumes that mean = variance. But in our dataset, variance (~3.7M) is orders of magnitude larger than the mean (~4500) — this is called overdispersion. When overdispersion is this severe, Poisson regression underestimates the true variability in the data, leading to incorrect standard errors and misleading inferences.
+**Why Poisson regression fails here**
+The Poisson model assumes mean = variance. But in bike share demand data, the variance (~3.7M) is orders of magnitude larger than the mean (~4500). This extreme **overdispersion** means Poisson regression underestimates variability and gives misleading inferences.
 
-**Why linear regression is fine for our bike demand data**:
+**Why linear regression is reasonable**
 
-1. At its core, our daily bike count, cnt, is the sum of thousands of individual, independent decisions made by people throughout the day.
+1. Daily bike counts are the sum of thousands of independent ride decisions.
 
-cnt = (Decision of person 1) + (Decision of person 2) + ... + (Decision of person N)
+   * cnt = (Decision of person 1) + (Decision of person 2) + ... + (Decision of person N).
+2. By the **Central Limit Theorem**, the sum of many independent random variables tends toward normality, regardless of their individual distributions.
+3. With a large mean (~4500):
 
-2. The CLT states that when you sum up a large number of independent random variables, their sum will be approximately normally distributed, regardless of the original distribution of the individual variables.
+   * The data behave like a continuous variable (discreteness irrelevant).
+   * The distribution is nearly symmetric and bell-shaped.
+   * Residuals approximate normality well.
+4. Unlike Poisson, a normal regression allows variance ≠ mean, so it can accommodate the large spread in the data.
+5. A Binomial interpretation (many riders, each with ride/no ride) further justifies that for large totals, the Normal approximation works extremely well.
 
-3. By CLT, when the average count is very large, the distribution of the counts becomes approximately normal. Our mean count is over 4500. A distribution with such a high average is:
-- Effectively Continuous: The difference between 4500 and 4501 is negligible, so the discrete nature of the data is no longer a practical issue.
-- Symmetric: Any potential skewness you'd find in a count distribution with a low mean disappears. The distribution will be almost perfectly symmetric and bell-shaped, which aligns with the assumptions of linear regression.
+**Important caveats**
 
-**Normal Regression Easily Handles Overdispersion**
-Unlike the Poisson model, a normal distribution does not assume the mean equals the variance. It has a separate, independent parameter for variance. This means it can model the high variance in your data without any issue, accurately capturing the data's true spread.
+* **Heteroskedasticity**: OLS still assumes constant variance conditional on predictors. In practice, bike demand variance may increase with temperature, season, or holidays. Use robust (heteroskedasticity-consistent) standard errors or check residual plots.
+* **Temporal dependence**: Counts are serially correlated (yesterday’s rides affect today’s). Pure cross-sectional OLS can misstate uncertainty. Adding lagged terms or time-series corrections (ARIMA errors, GLS) improves inference.
+* **Negative predictions**: Linear regression can, in theory, predict negatives. With means >4500, this is rare but worth noting.
+* **Alternatives**: If overdispersion and skew were smaller, Negative Binomial regression would be the natural count-data fix. Here, the Normal approximation is both simpler and effective.
 
+**Takeaway**
+For bike share demand with large daily counts, **linear regression is a justified and practical choice**. It avoids the breakdown of Poisson under extreme overdispersion, and the CLT ensures approximate normality. Just remember to:
 
-**One modelling view (Binomial):**  
-Each ride decision can be thought of as a Bernoulli trial (ride or no ride). If we imagine summing over all potential riders, then the daily total is like a Binomial random variable. For large numbers (e.g. ~4500 average rides per day, max ~8714), the Binomial is very well-approximated by a Normal distribution.
-
-
-**Takeaway:**
-Our bike sharing demand is best handled with linear regression, since the large counts mitigate the usual problems of treating counts as continuous. Poisson regression, while theoretically suited for count data, breaks down here due to extreme overdispersion. If we want a count model that respects overdispersion, negative binomial regression would be the alternative.
+* Use robust SEs to handle heteroskedasticity,
+* Consider time dependence,
+* Compare predictive accuracy with Negative Binomial or time-series models.
