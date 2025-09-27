@@ -27,6 +27,7 @@ features that may influence demand, such as:
 - Count: The target variable representing the number of bikes rented.
 
 ## Model Choice:
+---
 
 ### Counts often violate linear regression assumptions:
 
