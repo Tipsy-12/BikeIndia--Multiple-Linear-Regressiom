@@ -28,14 +28,14 @@ features that may influence demand, such as:
 
 ## Model Choice:
 
-**Why counts often need special treatment**
+**Why counts often need special treatment:**
 Count data are usually small integers (0, 1, 2, …). This makes them problematic for linear regression:
 
 * **Non-normal errors**: residuals are skewed, violating normality.
 * **Heteroskedasticity**: variance typically grows with the mean, violating constant variance.
   That’s why count regressions (Poisson, Negative Binomial) are commonly used.
 
-**Why Poisson regression fails here**
+**Why Poisson regression fails here:**
 The Poisson model assumes mean = variance. But in bike share demand data, the variance (~3.7M) is orders of magnitude larger than the mean (~4500). This extreme **overdispersion** means Poisson regression underestimates variability and gives misleading inferences.
 
 **Why linear regression is reasonable**
@@ -49,7 +49,7 @@ The Poisson model assumes mean = variance. But in bike share demand data, the va
    * The data behave like a continuous variable (discreteness irrelevant).
    * The distribution is nearly symmetric and bell-shaped.
    * Residuals approximate normality well.
-4. Unlike Poisson, a normal regression allows variance ≠ mean, so it can accommodate the large spread in the data.
+4. Unlike Poisson, a normal regression allows the variance ≠ mean, so it can accommodate the large spread in the data.
 5. A Binomial interpretation (many riders, each with ride/no ride) further justifies that for large totals, the Normal approximation works extremely well.
 
 **Important caveats**
