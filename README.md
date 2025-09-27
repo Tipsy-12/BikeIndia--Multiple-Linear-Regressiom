@@ -35,19 +35,32 @@ Normally, count data are small integers (0, 1, 2, …). This causes two issues:
 - Heteroskedasticity → variance increases with the mean, so constant variance of errors doesn’t hold.
 That’s why counts are usually modelled with Poisson-type regressions.
 
-### Why linear regression is fine for our bike demand data:
-In our case, counts are large (22 to 8714, mean ≈ 4500). At this scale, counts behave almost like continuous data, and by the Central Limit Theorem, the errors are close to normal. This makes the linear regression assumptions much less problematic. Even if variance grows with demand, OLS is fairly robust here, and predictions remain interpretable and practical. 
+### Why Poisson regression may fail here:
+The Poisson model assumes that mean = variance. But in our dataset, variance (~3.7M) is orders of magnitude larger than the mean (~4500) — this is called overdispersion. When overdispersion is this severe, Poisson regression underestimates the true variability in the data, leading to incorrect standard errors and misleading inferences.
 
-The daily total count is not just one “event,” but the sum of thousands of individual ride decisions made by users.  
-The CLT says: if you take the sample mean of n independent draws from some distribution with finite mean/variance, then as n→∞, the distribution of that sample mean tends to normal. In our case, each day’s bike demand is like one draw from the (unknown) population distribution of daily demand. Since we actually have 731 days of observations, the sample size is large enough for CLT to apply.
+### Why linear regression is fine for our bike demand data:
+
+At its core, our daily bike count, cnt, is the sum of thousands of individual, independent decisions made by people throughout the day.
+
+cnt = (Decision of person 1) + (Decision of person 2) + ... + (Decision of person N)
+
+The CLT states that when you sum up a large number of independent random variables, their sum will be approximately normally distributed, regardless of the original distribution of the individual variables.
+
+When the average count is very large, the distribution of the counts becomes approximately normal. Our mean count is over 4500. A distribution with such a high average is:
+
+1. Effectively Continuous: The difference between 4500 and 4501 is negligible, so the discrete nature of the data is no longer a practical issue.
+
+2. Symmetric: Any potential skewness you'd find in a count distribution with a low mean disappears. The distribution will be almost perfectly symmetric and bell-shaped, which aligns with the assumptions of linear regression.
+
+Normal Regression Easily Handles Overdispersion
+Unlike the Poisson model, a normal distribution does not assume the mean equals the variance. It has a separate, independent parameter for variance. This means it can model the high variance in your data without any issue, accurately capturing the data's true spread.
+
+In summary, the massive mean count makes the data behave like a normal distribution, and the severe overdispersion makes the Poisson model unsuitable. Therefore, normal regression is the more appropriate and practical choice.
 
 
 **One modelling view (Binomial):**  
 Each ride decision can be thought of as a Bernoulli trial (ride or no ride). If we imagine summing over all potential riders, then the daily total is like a Binomial random variable. For large numbers (e.g. ~4500 average rides per day, max ~8714), the Binomial is very well-approximated by a Normal distribution.
 
-
-### Why Poisson regression may fail here:
-The Poisson model assumes that mean = variance. But in our dataset, variance (~3.7M) is orders of magnitude larger than the mean (~4500) — this is called overdispersion. When overdispersion is this severe, Poisson regression underestimates uncertainty, produces biased standard errors, and can lead to misleading inferences.
 
 ### Takeaway:
 Our bike sharing demand is best handled with linear regression, since the large counts mitigate the usual problems of treating counts as continuous. Poisson regression, while theoretically suited for count data, breaks down here due to extreme overdispersion. If we want a count model that respects overdispersion, negative binomial regression would be the alternative.
